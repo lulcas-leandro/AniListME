@@ -4,9 +4,9 @@ from flask import Flask
 from .config import DevConfig, ProdConfig, TestConfig
 from .extensions import db, migrate, login_manager
 
-from .routes.auth import auth_bp
-from .routes.anime import anime_bp
-from .routes.public import public_bp
+from .routes.auth.views import auth_bp
+from .routes.anime.views import anime_bp
+from .routes.public.views import public_bp
 
 config_mapping = {
     'development': DevConfig,
@@ -26,15 +26,16 @@ def create_app(config_name='development'):
     migrate.init_app(app, db)
     login_manager.init_app(app)
 
-    app.register_blueprint(auth_bp, url_prefix='/auth')
-    app.register_blueprint(anime_bp, url_prefix='/anime')
-    app.register_blueprint(public_bp, url_prefix='/')
+    app.register_blueprint(auth_bp, url_prefix='')
+    app.register_blueprint(anime_bp, url_prefix='')
+    app.register_blueprint(public_bp, url_prefix='')
 
     try:
         os.makedirs(app.instance_path)
     except OSError:
         pass
 
-    
+    return app
+
 
 
